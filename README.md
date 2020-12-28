@@ -37,7 +37,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ## 💻 Projeto
 
-A aplicação é um simples repositório para gerenciar ferramentas com seus respectivos nomes, links, descrições e tags.
+Aplicação para gerenciar ferramentas de produtividade com seus respectivos nomes, links, descrições e tags.
 
 ## :rocket: Como testar
 
