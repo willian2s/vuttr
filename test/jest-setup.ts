@@ -7,3 +7,5 @@ beforeAll(async () => {
   await server.init();
   global.testRequest = supertest(server.getApp());
 }, 20000);
+
+afterAll(async () => await server.close());
