@@ -116,4 +116,27 @@ describe('Tools functional test', () => {
       },
     ]);
   });
+
+  it('Should delete a tool with success', async () => {
+    const newTool = {
+      title: 'hotel',
+      link: 'https://github.com/typicode/hotel',
+      description:
+        'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
+      tags: [
+        'node',
+        'organizing',
+        'webapps',
+        'domain',
+        'developer',
+        'https',
+        'proxy',
+      ],
+    };
+
+    const createTool = await global.testRequest.post('/tools').send(newTool);
+    const id = createTool.body.id;
+    const response = await global.testRequest.delete(`/tools/${id}`);
+    expect(response.status).toBe(204);
+  });
 });
