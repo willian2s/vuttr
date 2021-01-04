@@ -10,14 +10,12 @@
     "git:add": "yarn lint && yarn lint:fix && yarn style:fix && yarn style:check && git add . && echo \"Passing for git add\"",
     "build": "tsc",
     "start": "node dist/src/index.js",
-    "start:prod": "yarn build && node dist/src/index.js",
     "start:dev": "ts-node-dev --transpile-only 'src/index.ts' | pino-pretty -c",
     "lint": "eslint ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",
     "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*.ts'",
-    "test": "yarn test:unit && yarn test:functional",
-    "test:unit": "jest",
+    "test": "yarn test:functional",
     "test:functional": "jest --projects ./test --runInBand"
   },
   "devDependencies": {
