@@ -1,4 +1,4 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
 export interface Tool {
   _id?: string;
@@ -6,6 +6,7 @@ export interface Tool {
   link: string;
   description: string;
   tags: string[];
+  user: string;
 }
 
 export enum CUSTOM_VALIDATION {
@@ -22,6 +23,7 @@ const schema = new mongoose.Schema(
     link: { type: String, required: true },
     description: { type: String, required: true },
     tags: { type: [String], required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   },
   {
     toJSON: {

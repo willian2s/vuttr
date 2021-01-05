@@ -3,31 +3,33 @@ import { User } from '@src/models/user';
 import AuthService from '@src/services/auth';
 
 describe('Tools functional test', () => {
-  const defaultTool = {
-    title: 'hotel',
-    link: 'https://github.com/typicode/hotel',
-    description:
-      'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
-    tags: [
-      'node',
-      'organizing',
-      'webapps',
-      'domain',
-      'developer',
-      'https',
-      'proxy',
-    ],
-  };
   const defaultUser = {
     name: 'John Doe',
     email: 'john@mail.com',
     password: '1234',
   };
   let token: string;
+  let defaultTool: Record<string, unknown>;
   beforeEach(async () => {
     await Tool.deleteMany({});
     await User.deleteMany({});
     const user = await new User(defaultUser).save();
+    defaultTool = {
+      title: 'hotel',
+      link: 'https://github.com/typicode/hotel',
+      description:
+        'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
+      tags: [
+        'node',
+        'organizing',
+        'webapps',
+        'domain',
+        'developer',
+        'https',
+        'proxy',
+      ],
+      user: user.id,
+    };
     token = AuthService.generateToken(user.toJSON());
   });
 
