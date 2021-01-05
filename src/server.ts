@@ -3,7 +3,8 @@ import config from 'config';
 import { Server } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { Application } from 'express';
-import { ToolsController } from '@src/controller/tools';
+import { ToolsController } from '@src/controllers/tools';
+import { UsersController } from '@src/controllers/users';
 import * as database from '@src/database';
 import logger from '@src/logger';
 
@@ -27,7 +28,8 @@ export class SetupServer extends Server {
 
   private setupControllers(): void {
     const toolsController = new ToolsController();
-    this.addControllers([toolsController]);
+    const usersController = new UsersController();
+    this.addControllers([toolsController, usersController]);
   }
 
   public getApp(): Application {

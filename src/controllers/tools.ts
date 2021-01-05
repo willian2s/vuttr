@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
-import { BaseController } from '@src/controller';
+import { BaseController } from '@src/controllers';
 import { Tool } from '@src/models/tool';
 import logger from '@src/logger';
 
