@@ -43,10 +43,10 @@ Aplicação para gerenciar ferramentas de produtividade com seus respectivos nom
 
 - Clone o repositório: `git clone https://github.com/willian2s/vuttr.git`
 - Instale as dependencias: `yarn install`
+- Caso deseje rodar os testes: `yarn test`
+- Gere o build: `yarn build`
 - Inicie o servidor: `yarn start`; ou
 - Inicie o servidor como desenvolvedor: `yarn start:dev`
-- Para gerar o build: `yarn build`
-- Caso deseje rodar os testes: `yarn test`
 
 ## 🤔 Como contribuir
 

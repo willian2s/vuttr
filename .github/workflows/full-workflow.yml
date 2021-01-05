@@ -1,0 +1,46 @@
+name: Full workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        mongodb-version: [4.2]
+
+    steps:
+    - uses: actions/checkout@v2
+    - run: git fetch --prune --unshallow
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.1.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+
+    - name: Install dependencies
+      run: yarn --frozen-lockfile
+
+    - name: Run all tests
+      run: yarn test
+      env:
+        URI_MONGODB_TEST: ${{ secrets.URI_MONGODB_TEST }}
+        PORT: ${{ secrets.PORT }}
+        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        TOKEN_EXPIRES_IN: ${{ secrets.TOKEN_EXPIRES_IN }}
+        
