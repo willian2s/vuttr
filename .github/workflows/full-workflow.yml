@@ -41,4 +41,6 @@ jobs:
       env:
         URI_MONGODB_TEST: ${{ secrets.URI_MONGODB_TEST }}
         PORT: ${{ secrets.PORT }}
+        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        TOKEN_EXPIRES_IN: ${{ secrets.TOKEN_EXPIRES_IN }}
         
