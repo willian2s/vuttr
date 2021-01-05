@@ -37,16 +37,20 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ## 💻 Projeto
 
-Aplicação para gerenciar ferramentas de produtividade com seus respectivos nomes, links, descrições e tags.
+Aplicação contruida para gerenciar ferramentas de produtividade, onde é possivel cadastralas com seu respectivo nome, link de acesso, descrição e tags. Utiliza autenticação JWT para maior segurança nas requisições.
+O projeto está todo coberto por testes e antes do deploy ser feito, passa pelo Github Actions onde certifica que os testes estão passando e assim autoriza o deploy através do Heroku.
 
 ## :rocket: Como testar
 
 - Clone o repositório: `git clone https://github.com/willian2s/vuttr.git`
 - Instale as dependencias: `yarn install`
+- Adicione as váriaveis de ambiente em: `.env`
 - Caso deseje rodar os testes: `yarn test`
 - Gere o build: `yarn build`
 - Inicie o servidor: `yarn start`; ou
 - Inicie o servidor como desenvolvedor: `yarn start:dev`
+- Caso deseje, importe o arquivo `vuttr-request.json` para o insomina/postman, para ter acesso as requisições.
+  - Para adicinar uma nova ferramenta, é preciso criar um novo usuário e autentica-lo, assim será gerado um token que deverá ser setado no headers da seguite forma: `x-access-token: {token}`.
 
 ## 🤔 Como contribuir
 
@@ -59,7 +63,7 @@ Depois que o merge da sua pull request for feito, você pode deletar a sua branc
 
 ## :memo: Licença
 
-Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE.md) para mais detalhes. 
+Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE.md) para mais detalhes.
 
 ---
 
