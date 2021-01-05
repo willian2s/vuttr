@@ -1,14 +1,23 @@
-import { Controller, Delete, Get, Post } from '@overnightjs/core';
+import {
+  ClassMiddleware,
+  Controller,
+  Delete,
+  Get,
+  Post,
+} from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { BaseController } from '@src/controllers';
+import { authMiddleware } from '@src/middlewares/auth';
 import { Tool } from '@src/models/tool';
 import logger from '@src/logger';
 
 @Controller('tools')
+@ClassMiddleware(authMiddleware)
 export class ToolsController extends BaseController {
   @Post('')
   public async create(req: Request, res: Response): Promise<void> {
     try {
+      // const tool = new Tool({ ...req.body, ...{ user: req.decoded?.id } });
       const tool = new Tool(req.body);
       const result = await tool.save();
       res.status(201).send(result);

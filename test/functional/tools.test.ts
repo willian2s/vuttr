@@ -1,4 +1,6 @@
 import { Tool } from '@src/models/tool';
+import { User } from '@src/models/user';
+import AuthService from '@src/services/auth';
 
 describe('Tools functional test', () => {
   const defaultTool = {
@@ -16,15 +18,24 @@ describe('Tools functional test', () => {
       'proxy',
     ],
   };
-
+  const defaultUser = {
+    name: 'John Doe',
+    email: 'john@mail.com',
+    password: '1234',
+  };
+  let token: string;
   beforeEach(async () => {
     await Tool.deleteMany({});
+    await User.deleteMany({});
+    const user = await new User(defaultUser).save();
+    token = AuthService.generateToken(user.toJSON());
   });
 
   describe('When creating a new tool', () => {
     it('Should create a tool with success', async () => {
       const response = await global.testRequest
         .post('/tools')
+        .set({ 'x-access-token': token })
         .send(defaultTool);
       expect(response.status).toBe(201);
       expect(response.body).toEqual(expect.objectContaining(defaultTool));
@@ -46,7 +57,10 @@ describe('Tools functional test', () => {
         ],
       };
 
-      const response = await global.testRequest.post('/tools').send(wrongTool);
+      const response = await global.testRequest
+        .post('/tools')
+        .set({ 'x-access-token': token })
+        .send(wrongTool);
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
         code: 422,
@@ -55,9 +69,13 @@ describe('Tools functional test', () => {
     });
 
     it('Should return 409 when the title already exists', async () => {
-      await global.testRequest.post('/tools').send(defaultTool);
+      await global.testRequest
+        .post('/tools')
+        .send(defaultTool)
+        .set({ 'x-access-token': token });
       const response = await global.testRequest
         .post('/tools')
+        .set({ 'x-access-token': token })
         .send(defaultTool);
       expect(response.status).toBe(409);
       expect(response.body).toEqual({
@@ -73,12 +91,16 @@ describe('Tools functional test', () => {
     });
 
     it('Should list all tools', async () => {
-      const response = await global.testRequest.get('/tools');
+      const response = await global.testRequest
+        .get('/tools')
+        .set({ 'x-access-token': token });
       expect(response.status).toBe(200);
     });
 
     it('Should list all tools with the same tag', async () => {
-      const response = await global.testRequest.get('/tools?tag=node');
+      const response = await global.testRequest
+        .get('/tools?tag=node')
+        .set({ 'x-access-token': token });
       expect(response.status).toBe(200);
     });
   });
@@ -87,9 +109,12 @@ describe('Tools functional test', () => {
     it('Should delete a tool with success', async () => {
       const createTool = await global.testRequest
         .post('/tools')
+        .set({ 'x-access-token': token })
         .send(defaultTool);
       const id = createTool.body.id;
-      const response = await global.testRequest.delete(`/tools/${id}`);
+      const response = await global.testRequest
+        .delete(`/tools/${id}`)
+        .set({ 'x-access-token': token });
       expect(response.status).toBe(204);
     });
   });
