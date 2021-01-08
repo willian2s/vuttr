@@ -1,0 +1,441 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Vuttr",
+    "description": "Built application to manage productivity tools, where it is possible to register them with their respective name, access link, description and tags.",
+    "termsOfService": "http://api_url/terms/",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [{
+      "url": "https://vuttrapp.herokuapp.com/",
+      "description": "Production Server"
+    },
+    {
+      "url": "http://localhost:3000/",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "post": {
+        "description": "Create a new User",
+        "operationId": "createUser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The user has been created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCreatedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Invalid parameters",
+                  "code": "400",
+                  "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/authenticate": {
+      "post": {
+        "description": "Authenticate the user on the API generating a JWT token",
+        "operationId": "authenticateUser",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAuth"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The user has been authenticate and the JWT returned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticatedUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "User unauthorized",
+                  "code": "401",
+                  "error": "Unauthorized"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tools": {
+      "post": {
+        "description": "Create a new tool through an authenticated user",
+        "operationId": "createTool",
+        "parameters": [{
+          "name": "x-access-token",
+          "in": "header",
+          "schema": {
+            "$ref": "#/components/schemas/jwtToken"
+          },
+          "required": true
+        }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tool"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The Tool has been created!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolCreatedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error validating the tool data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Error validating tool data",
+                  "code": "400",
+                  "error": "Bad Request"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Get tools",
+        "operationId": "getTools",
+        "parameters": [{
+          "name": "x-access-token",
+          "in": "header",
+          "schema": {
+            "$ref": "#/components/schemas/jwtToken"
+          },
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "The Tools information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetToolsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tools?tag={tag}": {
+      "get": {
+        "description": "Get tools per tag",
+        "operationId": "getTools",
+        "parameters": [{
+          "name": "x-access-token",
+          "in": "header",
+          "schema": {
+            "$ref": "#/components/schemas/jwtToken"
+          },
+          "required": true
+        }],
+        "responses": {
+          "200": {
+            "description": "The Tools information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetToolsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tools/:id": {
+      "get": {
+        "description": "Delete tool per id",
+        "operationId": "deleteTools",
+        "parameters": [{
+          "name": "x-access-token",
+          "in": "header",
+          "schema": {
+            "$ref": "#/components/schemas/jwtToken"
+          },
+          "required": true
+        }],
+        "responses": {
+          "204": {
+            "description": "Delete tool per id"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "jwtToken": {
+        "type": "string",
+        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTdmZTQ0YzQzYWQwYjAwMThmOGQ5ZmQiLCJuYW1lIjoiV2FsZGVtYXIgTmV0byIsImVtYWlsIjoid2FsZGVtYXJudEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRsUlZjWkc5d0dIVWJXcHF2TnJNR0F1SnNoWWJTR1RLSElQL3NycDlmTlkzZENFZDBJQjN6TyIsImlhdCI6MTU4NTQ0MDUxNywiZXhwIjoxNTg1NDYwNTE3fQ.JNtzLgCKGTAU9_-QjYUNxtM7X4nMU_pPIsNXDsEM-vP"
+      },
+      "name": {
+        "type": "string",
+        "example": "John Doe"
+      },
+      "email": {
+        "type": "string",
+        "example": "john@mail.com"
+      },
+      "password": {
+        "type": "string",
+        "example": "12345#@$$%"
+      },
+      "toolTitle": {
+        "type": "string",
+        "example": "Hotel"
+      },
+      "toolLink": {
+        "type": "string",
+        "example": "https://github.com/typicode/hotel"
+      },
+      "toolDescription": {
+        "type": "string",
+        "example": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box."
+      },
+      "id": {
+        "type": "string",
+        "example": "5e8131eba7768d9e4f06c884"
+      },
+      "toolsTag": {
+        "type": "string",
+        "example": [
+          "node",
+          "organizing",
+          "webapps",
+          "domain",
+          "developer",
+          "https",
+          "proxy"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/name"
+          },
+          "email": {
+            "$ref": "#/components/schemas/email"
+          },
+          "password": {
+            "$ref": "#/components/schemas/password"
+          }
+        }
+      },
+      "Tool": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "$ref": "#/components/schemas/toolTitle"
+          },
+          "link": {
+            "$ref": "#/components/schemas/toolLink"
+          },
+          "description": {
+            "$ref": "#/components/schemas/toolDescription"
+          },
+          "tags": {
+            "$ref": "#/components/schemas/toolsTag"
+          }
+        },
+        "required": ["title", "link", "description", "tags"]
+      },
+      "UserAuth": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "$ref": "#/components/schemas/email"
+          },
+          "password": {
+            "$ref": "#/components/schemas/password"
+          }
+        }
+      },
+      "UserCreatedResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/name"
+              },
+              "email": {
+                "$ref": "#/components/schemas/email"
+              },
+              "password": {
+                "$ref": "#/components/schemas/password"
+              },
+              "id": {
+                "$ref": "#/components/schemas/id"
+              }
+            }
+          }
+        }
+      },
+      "AuthenticatedUserResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "$ref": "#/components/schemas/name"
+              },
+              "email": {
+                "$ref": "#/components/schemas/email"
+              },
+              "password": {
+                "$ref": "#/components/schemas/password"
+              },
+              "id": {
+                "$ref": "#/components/schemas/id"
+              },
+              "token": {
+                "$ref": "#/components/schemas/jwtToken"
+              }
+            }
+          }
+        }
+      },
+      "ToolCreatedResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/id"
+          },
+          "title": {
+            "$ref": "#/components/schemas/toolTitle"
+          },
+          "link": {
+            "$ref": "#/components/schemas/toolLink"
+          },
+          "description": {
+            "$ref": "#/components/schemas/toolDescription"
+          },
+          "tags": {
+            "$ref": "#/components/schemas/toolsTag"
+          },
+          "user": {
+            "$ref": "#/components/schemas/id"
+          }
+        }
+      },
+      "GetToolsResponse": {
+        "type": "object",
+        "properties": {
+          "tool": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/id"
+              },
+              "title": {
+                "$ref": "#/components/schemas/toolTitle"
+              },
+              "link": {
+                "$ref": "#/components/schemas/toolLink"
+              },
+              "description": {
+                "$ref": "#/components/schemas/toolDescription"
+              },
+              "tags": {
+                "$ref": "#/components/schemas/toolsTag"
+              },
+              "user": {
+                "$ref": "#/components/schemas/id"
+              }
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "number"
+          },
+          "error": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "documentation": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

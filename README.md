@@ -35,6 +35,8 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 🛠 [Github Actions](https://github.com/features/actions)
 
+:electric_plug: [Heroku](https://www.heroku.com/home)
+
 ## 💻 Projeto
 
 Aplicação contruida para gerenciar ferramentas de produtividade, onde é possivel cadastralas com seu respectivo nome, link de acesso, descrição e tags. Utiliza autenticação JWT para maior segurança nas requisições.
