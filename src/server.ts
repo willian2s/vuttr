@@ -50,9 +50,8 @@ export class SetupServer extends Server {
   }
 
   private setupDoc(): void {
-    const root = path.resolve(__dirname, '..');
     this.app.get('/docs', (_, res: Response) => {
-      res.sendFile(path.join(`${root}/docs/index.html`));
+      res.sendFile(path.join(`${__dirname}/docs/index.html`));
     });
   }
 
