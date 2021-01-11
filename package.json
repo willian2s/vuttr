@@ -17,7 +17,8 @@
     "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*.ts'",
     "test": "yarn test:unit && yarn test:functional",
     "test:unit": "jest",
-    "test:functional": "jest --projects ./test --runInBand"
+    "test:functional": "jest --projects ./test --runInBand",
+    "doc": "aglio -i src/docs/api.apib -o src/docs/index.html"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",

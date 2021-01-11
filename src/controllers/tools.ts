@@ -29,7 +29,13 @@ export class ToolsController extends BaseController {
   @Get('')
   public async getTools(req: Request, res: Response): Promise<void> {
     try {
-      const tools = await Tool.find();
+      const { tag } = await req.query;
+      let tools;
+      if (tag !== undefined) {
+        tools = await Tool.find({ tags: tag as string });
+      } else {
+        tools = await Tool.find();
+      }
       res.status(200).send(tools);
     } catch (error) {
       logger.error(error);
