@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Tool } from '@src/models/tool';
 import { User } from '@src/models/user';
 import AuthService from '@src/services/auth';
@@ -10,10 +11,11 @@ describe('Tools functional test', () => {
   };
   let token: string;
   let defaultTool: Record<string, unknown>;
+  let user: any;
   beforeEach(async () => {
     await Tool.deleteMany({});
     await User.deleteMany({});
-    const user = await new User(defaultUser).save();
+    user = await new User(defaultUser).save();
     defaultTool = {
       title: 'hotel',
       link: 'https://github.com/typicode/hotel',
@@ -89,7 +91,16 @@ describe('Tools functional test', () => {
 
   describe('When listing tools', () => {
     beforeEach(async () => {
+      const otherTool = {
+        title: 'express',
+        link: 'https://github.com/typicode/hotel',
+        description:
+          'Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.',
+        tags: ['tag'],
+        user: user.id,
+      };
       await new Tool(defaultTool).save();
+      await new Tool(otherTool).save();
     });
 
     it('Should list all tools', async () => {
@@ -101,7 +112,8 @@ describe('Tools functional test', () => {
 
     it('Should list all tools with the same tag', async () => {
       const response = await global.testRequest
-        .get('/tools?tag=node')
+        .get('/tools')
+        .query({ tag: 'node' })
         .set({ 'x-access-token': token });
       expect(response.status).toBe(200);
     });

@@ -21,8 +21,8 @@ export class UsersController extends BaseController {
   public async authenticate(req: Request, res: Response): Promise<Response> {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(401).send({
-        code: 401,
+      return res.status(404).send({
+        code: 404,
         error: 'User not found!',
       });
     }
