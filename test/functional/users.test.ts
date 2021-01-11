@@ -76,7 +76,7 @@ describe('User functional user', () => {
         .send({ email: 'some-email@mail.com', password: '1234' });
 
       expect(response.body).toEqual({
-        code: 401,
+        code: 404,
         error: 'User not found!',
       });
     });

@@ -1,0 +1,364 @@
+FORMAT: 1A
+HOST: https://vuttrapp.herokuapp.com
+
+# API VUTTR
+
+Uma API ontruida para gerenciar ferramentas de produtividade, onde é possivel cadastralas com seu respectivo nome, link de acesso, descrição e tags.
+
+# Group User
+
+## User [/users]
+
+## Create user [POST]
+
++ Request Create user
+    + Headers
+
+            Content-Type: application/json
+
+    + Attributes
+
+        + name: John Doe (required) - User name
+        + email: john@mail.com (required) - User email
+        + password: 1234 (required) - User password
+        
++ Response 201 (application/json)
+    + Attributes
+
+        + id: 5ff47c450fe2a53dc9564a66 (string) - User ID
+        + name: John Doe (string) - User name
+        + email: john@mail.com (string) - User email
+        + senha: $2b$10$7PYWX17hQUFNWonwJ8wZoeheJBdj1FEEmLGUjvusj4lxgsDoGs5Ei (string) - Encrypted user password
+
++ Response 409 (application/json)
+    + Attributes
+
+        + code: 409 (number) - Error code
+        + error: User validation failed: email: already exists in the database. (string) - Error message
+
++ Response 422 (application/json)
+    + Attributes
+
+        + code: 422 (number) - Error code
+        + error: User validation failed: name: Path `name` is required. (string) - Error message
+
+## User authenticate [/users/authenticate]
+
+## User authenticate [POST]
+
++ Request User authenticate
+    + Headers
+
+            Content-Type: application/json
+
+    + Attributes
+
+        + email: john@mail.com (required) -  User email
+        + password: 1234 (required) - User Password
+
++ Response 201 (application/json)
+    + Attributes
+
+        + id: 5ff47c450fe2a53dc9564a66 (string) - User ID
+        + name: John Doe (string) - User name
+        + email: john@mail.com (string) - User email
+        + senha: $2b$10$7PYWX17hQUFNWonwJ8wZoeheJBdj1FEEmLGUjvusj4lxgsDoGs5Ei (string) - Encrypted user password
+        + token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5AbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQ3UFlXWDE3aFFVRk5Xb253Sjh3Wm9laGVKQmRqMUZFRW1MR1VqdnVzajRseGdzRG9HczVFaSIsImlkIjoiNWZmNDdjNDUwZmUyYTUzZGM5NTY0YTY2IiwiaWF0IjoxNjEwMTQzNDE4LCJleHAiOjE2MTAzNDM0MTh9.IX0xmD7nY_6hxH4amFf3GqLBaJhZbTgqUx9RhejR2Fk (string) - Authentication token
+
++ Response 401 (application/json)
+    + Attributes
+
+        + code: 401 (number) - Code error
+        + error: Password does not match! (string) - Error message
+        
++ Response 404 (application/json)
+    + Attributes
+
+        + code: 404 (number) - Code error
+        + error: User not found! (string) - Error message
+
+# Group Tools
+
+## Tools [/tools]
+
+## Create Tool [POST]
+
++ Request Create Tool
+    + Headers
+
+            Content-Type: application/json
+            x-access-token: yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5AbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQ3UFlXWDE3aFFVRk5Xb253Sjh3Wm9laGVKQmRqMUZFRW1MR1VqdnVzajRseGdzRG9HczVFaSIsImlkIjoiNWZmNDdjNDUwZmUyYTUzZGM5NTY0YTY2IiwiaWF0IjoxNjEwMTQzNDE4LCJleHAiOjE2MTAzNDM0MTh9.IX0xmD7nY_6hxH4amFf3GqLBaJhZbTgqUx9RhejR2Fk
+
+    + Attributes
+
+        + title: hotel (required) - Tool title
+        + link: https://github.com/typicode/hotel (required) - Tool access link
+        + description: Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box. (required) - Tool description
+        + tags: node, organizing, webapps, domain, developer, https, proxy (required) - Tool tags
+    
++ Response 201 (application/json)
+    + Attributes
+
+        + id: 5ffc98a14ae9ff2a139bb5eb (string) - Tool ID
+        + title: hotel (string) - Tool title
+        + link: https://github.com/typicode/hotel (string) - lool access link
+        + description: Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box. (string) - Tool description
+        + tags: node, organizing, webapps, domain, developer, https, proxy (array) - Tool tags
+        + user: 5ff47c450fe2a53dc9564a66 (string) - Id of the user who registered the tool
+
++ Response 401 (application/json)
+    + Attributes
+
+        + code: 401 (number) - Error code
+        + error: jwt must be provided (string) - Error message
+
++ Response 409 (application/json)
+    + Attributes
+
+        + code: 409 (number) - Error code
+        + error: Tool validation failed: title: already exists in the database. (string) - Error message
+
++ Response 422 (application/json)
+    + Attributes
+
+        + code: 422 (number) - Error code
+        + error: Tool validation failed: title: Path `title` is required. (string) - Error message
+
+## List all tools [GET]
+
++ Request list all tools
+    + Headers
+
+            Content-Type: application/json
+            x-access-token: yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5AbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQ3UFlXWDE3aFFVRk5Xb253Sjh3Wm9laGVKQmRqMUZFRW1MR1VqdnVzajRseGdzRG9HczVFaSIsImlkIjoiNWZmNDdjNDUwZmUyYTUzZGM5NTY0YTY2IiwiaWF0IjoxNjEwMTQzNDE4LCJleHAiOjE2MTAzNDM0MTh9.IX0xmD7nY_6hxH4amFf3GqLBaJhZbTgqUx9RhejR2Fk
+
++ Response 200 (application/json)
+        
+    + body
+
+            [
+              {
+                "id": "5ffc97ff4ae9ff2a139bb5e8"
+                "title": "Notion",
+                "link": "https://notion.so",
+                "description": "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
+                "tags": [
+                  "organization",
+                  "planning",
+                  "collaboration",
+                  "writing",
+                  "calendar"
+                ],
+                "user": "5ff47c450fe2a53dc9564a66",
+              },
+              {
+                "id": "5ffc981c4ae9ff2a139bb5e9"
+                "title": "json-server",
+                "link": "https://github.com/typicode/json-server",
+                "description": "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
+                "tags": [
+                  "api",
+                  "json",
+                  "schema",
+                  "node",
+                  "github",
+                  "rest"
+                ],
+                "user": "5ff47c450fe2a53dc9564a66",
+              },
+              {
+                "id": "5ffc984e4ae9ff2a139bb5ea"
+                "title": "fastify",
+                "link": "https://www.fastify.io/",
+                "description": "Extremely fast and simple, low-overhead web framework for NodeJS. Supports HTTP2.",
+                "tags": [
+                  "web",
+                  "framework",
+                  "node",
+                  "http2",
+                  "https",
+                  "localhost"
+                ],
+                "user": "5ff47c450fe2a53dc9564a66",
+              },
+              {
+                "id": "5ffc98a14ae9ff2a139bb5eb"
+                "title": "hotel",
+                "link": "https://github.com/typicode/hotel",
+                "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+                "tags": [
+                  "node",
+                  "organizing",
+                  "webapps",
+                  "domain",
+                  "developer",
+                  "https",
+                  "proxy"
+                ],
+                "user": "5ff47c450fe2a53dc9564a66",
+              }
+            ]
+
+    + schema 
+
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Tool ID"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Tool title"
+                },
+                "link": {
+                  "type": "string",
+                  "description": "lool access link"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Tool description"
+                },
+                "tags": {
+                  "type": "array",
+                  "description": "Tool tags"
+                },
+                "user": {
+                  "type": "string",
+                  "description": "Id of the user who registered the tool"
+                }
+              }
+            }
+
++ Response 401 (application/json)
+    + Attributes
+
+        + code: 401 (number) - Error code
+        + error: jwt must be provided (string) - Error message
+
+## List tools per tag [/tools{?tag}]
+
+### List tools per tag [GET]
++ Request list tools per tag
+    + Headers
+
+            Content-Type: application/json
+            x-access-token: yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5AbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQ3UFlXWDE3aFFVRk5Xb253Sjh3Wm9laGVKQmRqMUZFRW1MR1VqdnVzajRseGdzRG9HczVFaSIsImlkIjoiNWZmNDdjNDUwZmUyYTUzZGM5NTY0YTY2IiwiaWF0IjoxNjEwMTQzNDE4LCJleHAiOjE2MTAzNDM0MTh9.IX0xmD7nY_6hxH4amFf3GqLBaJhZbTgqUx9RhejR2Fk
+
++ Parameters
+    + tag (string, optional) - EXEMPLE `node`
+
++ Response 200 (application/json)
+        
+    + body
+
+            [
+              {
+                "id": "5ffc981c4ae9ff2a139bb5e9"
+                "title": "json-server",
+                "link": "https://github.com/typicode/json-server",
+                "description": "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
+                "tags": [
+                  "api",
+                  "json",
+                  "schema",
+                  "node",
+                  "github",
+                  "rest"
+                ],
+                "user": "5ff47c450fe2a53dc9564a66",
+              },
+              {
+                "id": "5ffc984e4ae9ff2a139bb5ea"
+                "title": "fastify",
+                "link": "https://www.fastify.io/",
+                "description": "Extremely fast and simple, low-overhead web framework for NodeJS. Supports HTTP2.",
+                "tags": [
+                  "web",
+                  "framework",
+                  "node",
+                  "http2",
+                  "https",
+                  "localhost"
+                ],
+                "user": "5ff47c450fe2a53dc9564a66",
+              },
+              {
+                "id": "5ffc98a14ae9ff2a139bb5eb"
+                "title": "hotel",
+                "link": "https://github.com/typicode/hotel",
+                "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+                "tags": [
+                  "node",
+                  "organizing",
+                  "webapps",
+                  "domain",
+                  "developer",
+                  "https",
+                  "proxy"
+                ],
+                "user": "5ff47c450fe2a53dc9564a66",
+              }
+            ]
+
+    + schema 
+
+            {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Tool ID"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Tool title"
+                },
+                "link": {
+                  "type": "string",
+                  "description": "lool access link"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Tool description"
+                },
+                "tags": {
+                  "type": "array",
+                  "description": "Tool tags"
+                },
+                "user": {
+                  "type": "string",
+                  "description": "Id of the user who registered the tool"
+                }
+              }
+            }
+
++ Response 401 (application/json)
+    + Attributes
+
+        + code: 401 (number) - Error code
+        + error: jwt must be provided (string) - Error message
+
+## Delete Tool [/tools/{id}]
+
+### Delete tool [DELETE]
+
++ Request Delete tool
+    + Headers
+
+            Content-Type: application/json
+            x-access-token: yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG5AbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCQ3UFlXWDE3aFFVRk5Xb253Sjh3Wm9laGVKQmRqMUZFRW1MR1VqdnVzajRseGdzRG9HczVFaSIsImlkIjoiNWZmNDdjNDUwZmUyYTUzZGM5NTY0YTY2IiwiaWF0IjoxNjEwMTQzNDE4LCJleHAiOjE2MTAzNDM0MTh9.IX0xmD7nY_6hxH4amFf3GqLBaJhZbTgqUx9RhejR2Fk
+
++ Parameters
+    + id (string, optional) - EXEMPLE `5ffc98a14ae9ff2a139bb5eb`
+
++ Response 204 (application/json)
+
++ Response 401 (application/json)
+    + Attributes
+
+        + code: 401 (number) - Error code
+        + error: jwt must be provided (string) - Error message

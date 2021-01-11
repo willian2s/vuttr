@@ -5,7 +5,8 @@ import bodyParser from 'body-parser';
 import * as http from 'http';
 import expressPino from 'express-pino-logger';
 import cors from 'cors';
-import { Application } from 'express';
+import { Application, Response } from 'express';
+import path from 'path';
 import { ToolsController } from '@src/controllers/tools';
 import { UsersController } from '@src/controllers/users';
 import * as database from '@src/database';
@@ -23,6 +24,7 @@ export class SetupServer extends Server {
   public async init(): Promise<void> {
     this.setupExpress();
     this.setupControllers();
+    this.setupDoc();
     await this.databaseSetup();
     this.setupErrorHandlers();
   }
@@ -45,6 +47,12 @@ export class SetupServer extends Server {
     const toolsController = new ToolsController();
     const usersController = new UsersController();
     this.addControllers([toolsController, usersController]);
+  }
+
+  private setupDoc(): void {
+    this.app.get('/docs', (_, res: Response) => {
+      res.sendFile(path.join(`${__dirname}/docs/index.html`));
+    });
   }
 
   private setupErrorHandlers(): void {
