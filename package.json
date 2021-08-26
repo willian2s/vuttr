@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "git:add": "yarn lint && yarn lint:fix && yarn style:fix && yarn style:check && git add . && echo \"Passing for git add\"",
-    "build": "tsc",
+    "build": "yarn clean && tsc && yarn copy-files",
     "start": "node dist/src/index.js",
     "start:dev": "ts-node-dev --transpile-only 'src/index.ts' | pino-pretty -c",
     "lint": "eslint ./src ./test --ext .ts",
@@ -18,7 +18,9 @@
     "test": "yarn test:unit && yarn test:functional",
     "test:unit": "jest",
     "test:functional": "jest --projects ./test --runInBand",
-    "doc": "aglio -i src/docs/api.apib -o src/docs/index.html"
+    "doc": "aglio -i src/docs/api.apib -o src/docs/index.html",
+    "clean": "rimraf dist/",
+    "copy-files": "copyfiles -u 1 src/docs/*.html dist/src/"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -50,6 +52,7 @@
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "config": "^3.3.3",
+    "copyfiles": "^2.4.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -58,6 +61,7 @@
     "jsonwebtoken": "^8.5.1",
     "module-alias": "^2.2.2",
     "mongoose": "5.10.1",
-    "pino": "^6.8.0"
+    "pino": "^6.8.0",
+    "rimraf": "^3.0.2"
   }
 }

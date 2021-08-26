@@ -40,7 +40,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 ## 💻 Projeto
 
 Aplicação contruida para gerenciar ferramentas de produtividade, onde é possivel cadastralas com seu respectivo nome, link de acesso, descrição e tags. Utiliza autenticação JWT para maior segurança nas requisições.
-O projeto está todo coberto por testes e antes do deploy ser feito, passa pelo Github Actions onde certifica que os testes estão passando e assim autoriza o deploy através do Heroku.
+O projeto está todo coberto por testes e antes do deploy ser feito, passa pelo Github Actions onde certifica que os testes estão passando e assim autoriza o deploy através do Heroku. Para acessar a documentação [Clique Aqui](https://vuttrapp.herokuapp.com/docs).
 
 ## :rocket: Como testar
 
